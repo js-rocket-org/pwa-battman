@@ -1,5 +1,5 @@
 // Bump this version string when deploying changes to verify updates/downgrades
-const APP_VERSION = 'v1.0.1';
+const APP_VERSION = 'v1.0.2';
 
 document.addEventListener('DOMContentLoaded', () => {
     const fillEl = document.getElementById('battery-level-fill');
