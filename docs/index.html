@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Battery PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Battery Status PWA</h1>
+            <p id="platform-note">Detecting device...</p>
+        </header>
+
+        <main class="battery-card">
+            <!-- Drawn Battery Graphic with Top Nib / Tip -->
+            <div class="battery-wrapper">
+                <div class="battery-tip"></div>
+                <div class="battery-body">
+                    <div id="battery-level-fill" class="battery-fill"></div>
+                    <div class="battery-percentage" id="percentage-text">--%</div>
+                </div>
+            </div>
+
+            <div class="battery-info">
+                <div class="info-row">
+                    <span>Status:</span>
+                    <strong id="charging-status">Checking...</strong>
+                </div>
+                <div class="info-row">
+                    <span>Source:</span>
+                    <strong id="api-source">--</strong>
+                </div>
+            </div>
+
+            <!-- Fallback Slider for iOS or manual control -->
+            <div id="fallback-control" class="fallback-container" style="display: none;">
+                <label for="battery-slider">iOS Simulation / Manual Control:</label>
+                <input type="range" id="battery-slider" min="0" max="100" value="75">
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('SW registered!', reg))
+                    .catch(err => console.log('SW failed', err));
+            });
+        }
+    </script>
+</body>
+</html>
