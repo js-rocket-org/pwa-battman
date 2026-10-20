@@ -1,12 +1,15 @@
+
+
 const SW_VERSION = "1.1.0";
 const CACHE_NAME = `battery-pwa-cache-${SW_VERSION}`;
 
+// Use relative paths to support GitHub Pages subpath hosting
 const ASSETS = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/app.js',
-    '/manifest.json'
+    './',
+    'index.html',
+    'style.css',
+    'app.js',
+    'manifest.json'
 ];
 
 let isDraining = false;
@@ -63,7 +66,7 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-    if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
+    if (event.request.method !== 'GET') {
         return;
     }
 
@@ -74,6 +77,7 @@ self.addEventListener('fetch', event => {
                     const responseToCache = networkResponse.clone();
                     caches.open(CACHE_NAME).then(cache => {
                         const cacheUrl = new URL(event.request.url);
+                        // Clean query parameters to match base asset in cache
                         cacheUrl.search = '';
                         cache.put(cacheUrl.toString(), responseToCache);
                     });
@@ -83,7 +87,9 @@ self.addEventListener('fetch', event => {
             .catch(() => {
                 const cacheUrl = new URL(event.request.url);
                 cacheUrl.search = '';
-                return caches.match(cacheUrl.toString());
+                // Ignore search params during offline cache lookup to support launching with parameters
+                return caches.match(cacheUrl.toString(), { ignoreSearch: true })
+                    .then(response => response || caches.match('./', { ignoreSearch: true }));
             })
     );
 });

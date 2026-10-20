@@ -1,8 +1,10 @@
+
+
 {
     "name": "Battery Monitor PWA",
     "short_name": "Battery",
     "description": "A cross-platform battery monitoring Progressive Web App",
-    "start_url": "/?source=pwa",
+    "start_url": "./index.html?source=pwa",
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#121212",

@@ -1,3 +1,5 @@
+
+
 // --- Configuration & Constants ---
 // Easily adjust HUD drift speed for burn-in protection:
 // 0.2 = very subtle, slow drift | 0.5 = moderate | 1.0+ = faster motion
@@ -256,7 +258,7 @@ function renderAnimation() {
 // --- Discharge Mode Controller ---
 
 function notifyServiceWorker(type) {
-    if (navigator.serviceWorker.controller) {
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
         navigator.serviceWorker.controller.postMessage({ type });
     } else if (swRegistration && swRegistration.active) {
         swRegistration.active.postMessage({ type });
@@ -386,7 +388,8 @@ async function performHardRefresh() {
 
     setStatus('Reloading...');
     setTimeout(() => {
-        window.location.href = window.location.pathname + '?refresh=' + Date.now();
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.location.href = cleanUrl + '?refresh=' + Date.now();
     }, 400);
 }
 
