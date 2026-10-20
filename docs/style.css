@@ -121,6 +121,24 @@ header p {
     border-radius: 8px;
 }
 
+.refresh-button {
+    width: 100%;
+    margin-top: 15px;
+    background: #007aff;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.refresh-button:active {
+    background: #0056b3;
+}
+
 .fallback-container {
     margin-top: 15px;
     width: 100%;

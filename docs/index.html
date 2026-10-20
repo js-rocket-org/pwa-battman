@@ -15,6 +15,7 @@
         <header>
             <h1>Battery Status PWA</h1>
             <p id="platform-note">Detecting device...</p>
+            <p class="version-badge">Version: <span id="app-version">--</span></p>
         </header>
 
         <main class="battery-card">
@@ -37,6 +38,9 @@
                     <strong id="api-source">--</strong>
                 </div>
             </div>
+
+            <!-- Manual Refresh / Force Update / Downgrade Button -->
+            <button id="refresh-btn" class="refresh-button">Force Refresh / Sync</button>
 
             <!-- Fallback Slider for iOS or manual control -->
             <div id="fallback-control" class="fallback-container" style="display: none;">

@@ -1,11 +1,21 @@
+// Bump this version string when deploying changes to verify updates/downgrades
+const APP_VERSION = 'v1.0.1';
+
 document.addEventListener('DOMContentLoaded', () => {
     const fillEl = document.getElementById('battery-level-fill');
     const percentageEl = document.getElementById('percentage-text');
     const chargingEl = document.getElementById('charging-status');
     const sourceEl = document.getElementById('api-source');
     const platformNote = document.getElementById('platform-note');
+    const versionEl = document.getElementById('app-version');
     const fallbackContainer = document.getElementById('fallback-control');
     const sliderEl = document.getElementById('battery-slider');
+    const refreshBtn = document.getElementById('refresh-btn');
+
+    // Display version on UI
+    if (versionEl) {
+        versionEl.textContent = APP_VERSION;
+    }
 
     function updateUI(level, charging) {
         const percentage = Math.round(level * 100);
@@ -53,6 +63,30 @@ document.addEventListener('DOMContentLoaded', () => {
         sliderEl.addEventListener('input', (e) => {
             const val = e.target.value / 100;
             updateUI(val, false);
+        });
+    }
+
+    // Manual Refresh / Force Update / Downgrade Handler
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', async () => {
+            refreshBtn.textContent = 'Syncing...';
+            try {
+                // Clear all browser caches stored by the service worker
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                }
+                // Unregister any active service workers so they fetch fresh files immediately
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(registrations.map(reg => reg.unregister()));
+                }
+            } catch (err) {
+                console.error('Error cleaning caches or service workers:', err);
+            } finally {
+                // Force reload the page completely from the network server (bypassing cache)
+                window.location.reload(true);
+            }
         });
     }
 });
