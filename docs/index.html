@@ -3,62 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Battery PWA</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1a1a1a">
+    <meta name="theme-color" content="#1e1e1e">
+    
+    <!-- iOS Specific PWA Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BatteryPWA">
+    
+    <title>Battery Status & Discharger</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
+    
+    <script>
+        const appVersion = "1.1.0"; 
+    </script>
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <h1>Battery Status PWA</h1>
-            <p id="platform-note">Detecting device...</p>
-            <p class="version-badge">Version: <span id="app-version">--</span></p>
+    <main class="app-container" id="main-view">
+        
+        <header class="app-header">
+            <h1>Battery Monitor</h1>
+            <span class="version-badge" id="version-display">v1.1.0</span>
         </header>
 
-        <main class="battery-card">
-            <!-- Drawn Battery Graphic with Top Nib / Tip -->
-            <div class="battery-wrapper">
-                <div class="battery-tip"></div>
+        <section class="battery-section" id="battery-section">
+            <div class="battery-outer">
                 <div class="battery-body">
-                    <div id="battery-level-fill" class="battery-fill"></div>
-                    <div class="battery-percentage" id="percentage-text">--%</div>
+                    <div class="battery-level" id="battery-level"></div>
+                    <div class="battery-text">
+                        <span id="battery-percentage">--%</span>
+                        <span class="charging-icon" id="charging-icon" style="display: none;">⚡</span>
+                    </div>
                 </div>
+                <div class="battery-tip"></div>
+            </div>
+            
+            <div id="ios-fallback-controls" class="fallback-controls" style="display: none;">
+                <p>Battery API not supported on iOS/Safari. Adjust slider to simulate discharge:</p>
+                <input type="range" id="battery-slider" min="1" max="100" value="75">
+                <label>
+                    <input type="checkbox" id="charging-toggle"> Charging
+                </label>
             </div>
 
-            <div class="battery-info">
-                <div class="info-row">
-                    <span>Status:</span>
-                    <strong id="charging-status">Checking...</strong>
+            <div class="discharge-card">
+                <h3>Battery Discharger</h3>
+                <div class="discharge-input-row">
+                    <label for="target-percent">Target Level (%):</label>
+                    <input type="number" id="target-percent" min="1" max="99" value="50">
                 </div>
-                <div class="info-row">
-                    <span>Source:</span>
-                    <strong id="api-source">--</strong>
+                <button id="start-discharge-btn" class="action-btn drain-btn">Start Discharge</button>
+            </div>
+        </section>
+
+        <footer class="app-footer">
+            <button id="refresh-btn" class="action-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
+                Force Refresh App
+            </button>
+            <div id="update-status" class="status-msg"></div>
+        </footer>
+
+    </main>
+
+    <!-- Fullscreen Discharge View (Hidden during normal mode) -->
+    <div id="discharge-view" class="discharge-overlay" style="display: none;">
+        <canvas id="drain-canvas"></canvas>
+        <div class="discharge-overlay-content">
+            <h2>Discharging Battery...</h2>
+            <div class="discharge-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Current</span>
+                    <span class="stat-value" id="discharge-current">--%</span>
+                </div>
+                <div class="stat-arrow">→</div>
+                <div class="stat-box">
+                    <span class="stat-label">Target</span>
+                    <span class="stat-value" id="discharge-target">--%</span>
                 </div>
             </div>
-
-            <!-- Manual Refresh / Force Update / Downgrade Button -->
-            <button id="refresh-btn" class="refresh-button">Force Refresh / Sync</button>
-
-            <!-- Fallback Slider for iOS or manual control -->
-            <div id="fallback-control" class="fallback-container" style="display: none;">
-                <label for="battery-slider">iOS Simulation / Manual Control:</label>
-                <input type="range" id="battery-slider" min="0" max="100" value="75">
-            </div>
-        </main>
+            <p class="discharge-note">Wake Lock Active • High CPU & GPU Workload</p>
+            <button id="stop-discharge-btn" class="action-btn stop-btn">Cancel Discharge</button>
+        </div>
     </div>
 
     <script src="app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('SW registered!', reg))
-                    .catch(err => console.log('SW failed', err));
-            });
-        }
-    </script>
 </body>
 </html>

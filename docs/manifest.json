@@ -1,18 +1,24 @@
 {
-  "id": "/",
-  "name": "Battery Status PWA",
-  "short_name": "BatteryPWA",
-  "start_url": "index.html",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#121212",
-  "theme_color": "#1a1a1a",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+    "name": "Battery Monitor PWA",
+    "short_name": "Battery",
+    "description": "A cross-platform battery monitoring Progressive Web App",
+    "start_url": "/?source=pwa",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#121212",
+    "theme_color": "#1e1e1e",
+    "icons": [
+        {
+            "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e1e1e'/><rect x='20' y='35' width='50' height='30' fill='none' stroke='white' stroke-width='4'/><rect x='70' y='45' width='6' height='10' fill='white'/><rect x='25' y='40' width='35' height='20' fill='%2322c55e'/></svg>",
+            "sizes": "192x192",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231e1e1e'/><rect x='20' y='35' width='50' height='30' fill='none' stroke='white' stroke-width='4'/><rect x='70' y='45' width='6' height='10' fill='white'/><rect x='25' y='40' width='35' height='20' fill='%2322c55e'/></svg>",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
 }
