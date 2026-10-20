@@ -1,9 +1,10 @@
-const CACHE_NAME = 'battery-pwa-v1';
+const CACHE_NAME = 'battery-pwa-v2';
 const ASSETS = [
   'index.html',
   'style.css',
   'app.js',
-  'manifest.json'
+  'manifest.json',
+  'icon.svg'
 ];
 
 self.addEventListener('install', (e) => {
@@ -11,6 +12,21 @@ self.addEventListener('install', (e) => {
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(ASSETS);
     })
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
